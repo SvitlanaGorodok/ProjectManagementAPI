@@ -33,6 +33,12 @@ public class EmployeeService implements CRUDService<EmployeeDto>{
                 .collect(Collectors.toList());
     }
 
+    public List<EmployeeDto> findAllWithPositionDetails() {
+        return repository.findAll().stream()
+                .map(converter::toDtoReplaceIdWithNames)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public EmployeeDto findById(UUID id) {
         EmployeeDao employeeDao = repository.findById(id)

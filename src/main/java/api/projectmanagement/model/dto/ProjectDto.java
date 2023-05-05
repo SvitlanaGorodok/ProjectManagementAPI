@@ -12,8 +12,6 @@ import java.util.UUID;
 
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProjectDto {
     UUID id;
     String name;

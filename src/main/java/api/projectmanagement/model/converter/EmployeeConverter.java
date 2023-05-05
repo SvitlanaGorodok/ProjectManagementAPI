@@ -14,17 +14,36 @@ public class EmployeeConverter {
     private final EmployeeLevelConverter employeeLevelConverter;
 
     public EmployeeDao toDao(EmployeeDto employeeDto){
-        return new EmployeeDao(employeeDto.getId(), employeeDto.getFirstName(),
-                employeeDto.getLastName(), employeeDto.getEmail(),
-                positionConverter.toDao(employeeDto.getPosition()),
-                employeeLevelConverter.toDao(employeeDto.getLevel()),
-                new ArrayList<>());
+        EmployeeDao employeeDao = new EmployeeDao();
+        employeeDao.setId(employeeDto.getId());
+        employeeDao.setFirstName(employeeDto.getFirstName());
+        employeeDao.setLastName(employeeDto.getLastName());
+        employeeDao.setEmail(employeeDto.getEmail());
+        employeeDao.setPosition(positionConverter.toDaoById(employeeDto.getPositionId()));
+        employeeDao.setLevel(employeeLevelConverter.toDaoById(employeeDto.getLevelId()));
+        employeeDao.setProjects(new ArrayList<>());
+        return employeeDao;
     }
 
     public EmployeeDto toDto(EmployeeDao employeeDao){
-        return new EmployeeDto(employeeDao.getId(), employeeDao.getFirstName(),
-                employeeDao.getLastName(), employeeDao.getEmail(),
-                positionConverter.toDto(employeeDao.getPosition()),
-                employeeLevelConverter.toDto(employeeDao.getLevel()));
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setId(employeeDao.getId());
+        employeeDto.setFirstName(employeeDao.getFirstName());
+        employeeDto.setLastName(employeeDao.getLastName());
+        employeeDto.setEmail(employeeDao.getEmail());
+        employeeDto.setPositionId(employeeDao.getPosition().getId().toString());
+        employeeDto.setLevelId(employeeDao.getLevel().getId().toString());
+        return employeeDto;
+    }
+
+    public EmployeeDto toDtoReplaceIdWithNames(EmployeeDao employeeDao){
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setId(employeeDao.getId());
+        employeeDto.setFirstName(employeeDao.getFirstName());
+        employeeDto.setLastName(employeeDao.getLastName());
+        employeeDto.setEmail(employeeDao.getEmail());
+        employeeDto.setPositionId(employeeDao.getPosition().getName());
+        employeeDto.setLevelId(employeeDao.getLevel().getName());
+        return employeeDto;
     }
 }

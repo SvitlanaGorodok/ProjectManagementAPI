@@ -13,16 +13,18 @@ public class ProjectConverter {
     private final EmployeeConverter employeeConverter;
 
     public ProjectDao toDao(ProjectDto projectDto){
-        return new ProjectDao(projectDto.getId(), projectDto.getName(), projectDto.getStartDate(), projectDto.getEndDate(),
-                projectDto.getEmployees().stream()
-                        .map(employeeConverter::toDao)
-                        .collect(Collectors.toList()));
+//        return new ProjectDao(projectDto.getId(), projectDto.getName(), projectDto.getStartDate(), projectDto.getEndDate(),
+//                projectDto.getEmployees().stream()
+//                        .map(employeeConverter::toDao)
+//                        .collect(Collectors.toList()));
+        return new ProjectDao();
     }
 
     public ProjectDto toDto(ProjectDao projectDao){
-        return new ProjectDto(projectDao.getId(), projectDao.getName(), projectDao.getStartDate(), projectDao.getEndDate(),
-                projectDao.getEmployees().stream()
-                        .map(employeeConverter::toDto)
-                        .collect(Collectors.toList()));
+//        return new ProjectDto(projectDao.getId(), projectDao.getName(), projectDao.getStartDate(), projectDao.getEndDate(),
+//                projectDao.getEmployees().stream()
+//                        .map(employeeConverter::toDto)
+//                        .collect(Collectors.toList()));
+        return new ProjectDto();
     }
 }

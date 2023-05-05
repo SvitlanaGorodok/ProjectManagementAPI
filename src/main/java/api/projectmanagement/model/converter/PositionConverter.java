@@ -5,14 +5,30 @@ import api.projectmanagement.model.dto.PositionDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Component
 public class PositionConverter {
     public PositionDao toDao(PositionDto positionDto){
-        return new PositionDao(positionDto.getId(), positionDto.getName(), new ArrayList<>());
+        PositionDao positionDao = new PositionDao();
+        positionDao.setId(positionDto.getId());
+        positionDao.setName(positionDto.getName());
+        positionDao.setEmployees(new ArrayList<>());
+        return positionDao;
+    }
+
+    public PositionDao toDaoById(String positionDtoId){
+        PositionDao positionDao = new PositionDao();
+        positionDao.setId(UUID.fromString(positionDtoId));
+        positionDao.setName("");
+        positionDao.setEmployees(new ArrayList<>());
+        return positionDao;
     }
 
     public PositionDto toDto(PositionDao positionDao){
-        return new PositionDto(positionDao.getId(), positionDao.getName());
+        PositionDto positionDto = new PositionDto();
+        positionDto.setId(positionDao.getId());
+        positionDto.setName(positionDao.getName());
+        return positionDto;
     }
 }

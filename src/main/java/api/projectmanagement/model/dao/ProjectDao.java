@@ -16,8 +16,6 @@ import java.util.UUID;
 @Entity
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProjectDao {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
