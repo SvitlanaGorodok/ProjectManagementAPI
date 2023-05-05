@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Table(name = "employee_levels")
 @Entity
@@ -16,10 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 public class EmployeeLevelDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
 
-    @Column(name = "name", nullable = false, length = 20, unique = true)
+    @Column(name = "name", nullable = false, length = 50, unique = true)
     String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "level")

@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
+import java.util.UUID;
 
 @Table(name = "employees")
 @Entity
@@ -18,14 +19,17 @@ import java.util.List;
 @NoArgsConstructor
 public class EmployeeDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
 
-    @Column(name = "first_name", nullable = false, length = 20)
+    @Column(name = "first_name", nullable = false, length = 50)
     String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 20)
+    @Column(name = "last_name", nullable = false, length = 50)
     String lastName;
+
+    @Column(name = "email", nullable = false, length = 50, unique = true)
+    String email;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "position_id")

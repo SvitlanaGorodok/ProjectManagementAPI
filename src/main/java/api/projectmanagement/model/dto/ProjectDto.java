@@ -8,13 +8,14 @@ import lombok.Setter;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectDto {
-    Integer id;
+    UUID id;
     String name;
     Date startDate;
     Date endDate;

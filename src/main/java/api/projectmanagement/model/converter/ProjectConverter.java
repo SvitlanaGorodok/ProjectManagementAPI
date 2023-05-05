@@ -2,11 +2,15 @@ package api.projectmanagement.model.converter;
 
 import api.projectmanagement.model.dao.ProjectDao;
 import api.projectmanagement.model.dto.ProjectDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
+@RequiredArgsConstructor
 public class ProjectConverter {
-    private final EmployeeConverter employeeConverter = new EmployeeConverter();
+    private final EmployeeConverter employeeConverter;
 
     public ProjectDao toDao(ProjectDto projectDto){
         return new ProjectDao(projectDto.getId(), projectDto.getName(), projectDto.getStartDate(), projectDto.getEndDate(),

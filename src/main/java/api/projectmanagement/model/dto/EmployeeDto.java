@@ -5,14 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeDto {
-    Integer id;
+    UUID id;
     String firstName;
     String lastName;
+    String email;
     PositionDto position;
     EmployeeLevelDto level;
 }
