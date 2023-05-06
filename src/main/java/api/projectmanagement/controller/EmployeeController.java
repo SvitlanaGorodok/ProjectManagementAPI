@@ -1,6 +1,8 @@
 package api.projectmanagement.controller;
 
+import api.projectmanagement.exception.EntityNotFoundException;
 import api.projectmanagement.model.dto.EmployeeDto;
+import api.projectmanagement.model.dto.PositionDto;
 import api.projectmanagement.service.EmployeeLevelService;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.PositionService;
@@ -20,17 +22,17 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final PositionService positionService;
     private final EmployeeLevelService levelService;
+
     @GetMapping("")
     public ModelAndView showAll() {
         ModelAndView model = new ModelAndView("employees/showall");
-        model.addObject("employees", employeeService.findAllWithPositionDetails());
+        model.addObject("employees", employeeService.findAll());
         return model;
     }
 
     @GetMapping("/create")
-    public ModelAndView createForm(@RequestParam(name = "msg", required = false, defaultValue = "") String msg) {
+    public ModelAndView createForm() {
         ModelAndView model = new ModelAndView("employees/create");
-        model.addObject("msg", msg);
         model.addObject("positions", positionService.findAll());
         model.addObject("levels", levelService.findAll());
         return model;
@@ -39,15 +41,28 @@ public class EmployeeController {
     @PostMapping("/create")
     public RedirectView create(@Validated @ModelAttribute("employeeDto") EmployeeDto employeeDto) {
         employeeService.save(employeeDto);
-        RedirectView redirect = new RedirectView("/employees/create");
-        redirect.addStaticAttribute("msg", "Employee successfully saved!");
-        return redirect;
+        return new RedirectView("/employees");
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUserByIdForm(@PathVariable("id") UUID id) {
+    public RedirectView delete(@PathVariable("id") UUID id) {
         employeeService.deleteById(id);
-        return "redirect:/employees";
+        return new RedirectView("/employees");
+    }
+
+    @GetMapping("/update/{id}")
+    public ModelAndView updateForm(@PathVariable("id") UUID id) {
+        ModelAndView model = new ModelAndView("employees/update");
+        model.addObject("employee", employeeService.findById(id));
+        model.addObject("positions", positionService.findAll());
+        model.addObject("levels", levelService.findAll());
+        return model;
+    }
+
+    @PostMapping("/update")
+    public RedirectView update(@Validated @ModelAttribute("employeeDto") EmployeeDto employeeDto) {
+        employeeService.save(employeeDto);
+        return new RedirectView("/employees");
     }
 
 }

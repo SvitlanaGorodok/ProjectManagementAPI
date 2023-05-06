@@ -17,9 +17,9 @@ public class PositionConverter {
         return positionDao;
     }
 
-    public PositionDao toDaoById(String positionDtoId){
+    public PositionDao toDaoById(UUID positionDtoId){
         PositionDao positionDao = new PositionDao();
-        positionDao.setId(UUID.fromString(positionDtoId));
+        positionDao.setId(positionDtoId);
         positionDao.setName("");
         positionDao.setEmployees(new ArrayList<>());
         return positionDao;

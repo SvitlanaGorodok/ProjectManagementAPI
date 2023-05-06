@@ -17,9 +17,9 @@ public class EmployeeLevelConverter {
         return employeeLevelDao;
     }
 
-    public EmployeeLevelDao toDaoById(String employeeLevelDtoId){
+    public EmployeeLevelDao toDaoById(UUID employeeLevelDtoId){
         EmployeeLevelDao employeeLevelDao = new EmployeeLevelDao();
-        employeeLevelDao.setId(UUID.fromString(employeeLevelDtoId));
+        employeeLevelDao.setId(employeeLevelDtoId);
         employeeLevelDao.setName("");
         employeeLevelDao.setEmployees(new ArrayList<>());
         return employeeLevelDao;

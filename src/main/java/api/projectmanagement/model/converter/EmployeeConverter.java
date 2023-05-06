@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -25,25 +26,27 @@ public class EmployeeConverter {
         return employeeDao;
     }
 
+    public EmployeeDao toDaoById(UUID employeeDtoId){
+        EmployeeDao employeeDao = new EmployeeDao();
+        employeeDao.setId(employeeDtoId);
+        employeeDao.setFirstName("");
+        employeeDao.setLastName("");
+        employeeDao.setEmail("");
+        employeeDao.setPosition(positionConverter.toDaoById(employeeDtoId));
+        employeeDao.setLevel(employeeLevelConverter.toDaoById(employeeDtoId));
+        employeeDao.setProjects(new ArrayList<>());
+        return employeeDao;
+    }
+
     public EmployeeDto toDto(EmployeeDao employeeDao){
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setId(employeeDao.getId());
         employeeDto.setFirstName(employeeDao.getFirstName());
         employeeDto.setLastName(employeeDao.getLastName());
         employeeDto.setEmail(employeeDao.getEmail());
-        employeeDto.setPositionId(employeeDao.getPosition().getId().toString());
-        employeeDto.setLevelId(employeeDao.getLevel().getId().toString());
-        return employeeDto;
-    }
-
-    public EmployeeDto toDtoReplaceIdWithNames(EmployeeDao employeeDao){
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(employeeDao.getId());
-        employeeDto.setFirstName(employeeDao.getFirstName());
-        employeeDto.setLastName(employeeDao.getLastName());
-        employeeDto.setEmail(employeeDao.getEmail());
-        employeeDto.setPositionId(employeeDao.getPosition().getName());
-        employeeDto.setLevelId(employeeDao.getLevel().getName());
+        employeeDto.setPositionId(employeeDao.getPosition().getId());
+        employeeDto.setLevelId(employeeDao.getLevel().getId());
+        employeeDto.setPositionDetails(employeeDao.getLevel().getName() + " " + employeeDao.getPosition().getName());
         return employeeDto;
     }
 }

@@ -1,9 +1,7 @@
 package api.projectmanagement.model.dto;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
@@ -17,5 +15,6 @@ public class ProjectDto {
     String name;
     Date startDate;
     Date endDate;
-    List<EmployeeDto> employees;
+    List<UUID> employeeIds;
+    List<String> projectsDetails;
 }

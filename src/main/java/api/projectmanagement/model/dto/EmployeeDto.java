@@ -12,6 +12,7 @@ public class EmployeeDto {
     String firstName;
     String lastName;
     String email;
-    String positionId;
-    String levelId;
+    UUID positionId;
+    UUID levelId;
+    String positionDetails;
 }

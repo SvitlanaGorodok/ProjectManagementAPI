@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update</title>
+  <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="~{navbar :: navbar}"></div>
+<div>
+  <form method="POST" th:action="@{/employees/update}">
+    <input hidden="hidden"  th:value="${employee.id}" name = "id"/>
+    <div class="form-group">
+      <input class="form-control" type="text" th:value="${employee.firstName}" name="firstName" placeholder="First name">
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" th:value="${employee.lastName}" name="lastName" placeholder="Last name">
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" th:value="${employee.email}" name="email" placeholder="Email">
+    </div>
+    <h5> Position:
+      <select class="form-control" id="position" name="positionId">
+        <option th:each="position : ${positions}"
+                th:value="${position.id}"
+                th:text="${position.name}"
+                th:selected="${position.id} == ${employee.positionId}">
+        </option>
+      </select>
+    </h5>
+    <h5> Level:
+      <select class="form-control" id="level" name="levelId">
+        <option th:each="level : ${levels}"
+                th:value="${level.id}"
+                th:text="${level.name}"
+                th:selected="${level.id} == ${employee.levelId}">
+        </option>
+      </select>
+    </h5>
+    <p>
+      <button class="btn btn-primary" type="submit">Save</button>
+      <input class="btn btn-secondary" type="reset" value="Reset form">
+    </p>
+    <p>
+      <a class="btn btn-info" title="Back to list"
+         th:href="@{/employees}">Back to employees list </a>
+    </p>
+  </form>
+  <p th:text="${msg}"></p>
+</div>
+</body>
+</html>
