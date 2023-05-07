@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
 <div style="margin: 10px">
-    <form method="POST" th:action="@{/employees/update}">
+    <form id="updateForm" name="updateForm"  th:method="POST" th:action="@{/employees/update}">
         <input hidden="hidden" th:value="${employee.id}" name="id"/>
         <div class="form-group">
             <input class="form-control" type="text" th:value="${employee.firstName}" name="firstName"
@@ -45,7 +45,7 @@
             </select>
         </h5>
         <p>
-            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-primary" type="submit" value="Send">Save</button>
             <input class="btn btn-secondary" type="reset" value="Reset form">
         </p>
         <p>
@@ -54,5 +54,18 @@
         </p>
     </form>
 </div>
+<script th:inline="javascript">
+    let myForm = document.getElementById('updateForm');
+    myForm.addEventListener('submit', validateForm);
+
+    function validateForm(e) {
+        let email = document.updateForm.email.value;
+        let emails = [[${emails}]];
+        if(emails.includes(email)) {
+            e.preventDefault();
+            alert('An account with email address ' + email + ' already exists!');
+        }
+    }
+</script>
 </body>
 </html>

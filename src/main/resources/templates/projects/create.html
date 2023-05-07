@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
 <div style="margin: 10px">
-    <form method="POST" th:action="@{/projects/create}">
+    <form id="createForm" name="createForm"  th:method="POST" th:action="@{/projects/create}">
         <div class="form-group">
             <input class="form-control" type="text" name="name" placeholder="Name" required>
         </div>
@@ -33,7 +33,7 @@
             </select>
         </h5>
         <p>
-            <button class="btn btn-primary" type="submit">Create</button>
+            <button class="btn btn-primary" type="submit" value="Send">Create</button>
             <input class="btn btn-secondary" type="reset" value="Reset form">
         </p>
         <p>
@@ -42,5 +42,25 @@
         </p>
     </form>
 </div>
+<script th:inline="javascript">
+    let myForm = document.getElementById('createForm');
+    myForm.addEventListener('submit', validateForm);
+
+    function validateForm(e) {
+        let projectName = document.createForm.name.value;
+        let projectNames = [[${projectNames}]];
+        if(projectNames.includes(projectName)) {
+            e.preventDefault();
+            alert('Project with name ' + projectName + ' already exists!');
+        }
+
+        let startDate = document.createForm.startDate.value;
+        let endDate = document.createForm.endDate.value;
+        if(startDate > endDate) {
+            e.preventDefault();
+            alert('Start date should be earlier than end date!');
+        }
+    }
+</script>
 </body>
 </html>

@@ -47,8 +47,8 @@ public class EmployeeService implements CRUDService<EmployeeDto> {
         repository.deleteById(id);
     }
 
-    public Optional<EmployeeDto> findByEmail(String email) {
-        return repository.findByEmail(email)
-                .map(converter::toDto);
+    public List<String> findAllEmails(){
+        return repository.findAllEmails();
     }
+
 }

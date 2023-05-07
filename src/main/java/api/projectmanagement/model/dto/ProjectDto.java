@@ -16,5 +16,4 @@ public class ProjectDto {
     Date startDate;
     Date endDate;
     List<UUID> employeeIds;
-    List<String> projectsDetails;
 }

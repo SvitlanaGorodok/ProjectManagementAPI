@@ -33,6 +33,7 @@ public class ProjectController {
     public ModelAndView createForm() {
         ModelAndView model = new ModelAndView("projects/create");
         model.addObject("employees", employeeService.findAll());
+        model.addObject("projectNames", projectService.findAllNames());
         return model;
     }
 
@@ -51,8 +52,12 @@ public class ProjectController {
     @GetMapping("/update/{id}")
     public ModelAndView updateForm(@PathVariable("id") UUID id) {
         ModelAndView model = new ModelAndView("projects/update");
-        model.addObject("project", projectService.findById(id));
+        ProjectDto project = projectService.findById(id);
+        model.addObject("project", project);
         model.addObject("employees", employeeService.findAll());
+        model.addObject("projectNames", projectService.findAllNames().stream()
+                .filter(n -> !n.equals(project.getName()))
+                .collect(Collectors.toList()));
         return model;
     }
 

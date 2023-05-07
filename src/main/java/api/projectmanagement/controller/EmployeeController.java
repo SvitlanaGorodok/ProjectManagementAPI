@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/employees")
@@ -34,7 +34,7 @@ public class EmployeeController {
         ModelAndView model = new ModelAndView("employees/create");
         model.addObject("positions", positionService.findAll());
         model.addObject("levels", levelService.findAll());
-        model.addObject("emails", List.of("lukrainka@gmail.com", "test@gmail.com"));
+        model.addObject("emails", employeeService.findAllEmails());
         return model;
     }
 
@@ -53,9 +53,13 @@ public class EmployeeController {
     @GetMapping("/update/{id}")
     public ModelAndView updateForm(@PathVariable("id") UUID id) {
         ModelAndView model = new ModelAndView("employees/update");
-        model.addObject("employee", employeeService.findById(id));
+        EmployeeDto employee = employeeService.findById(id);
+        model.addObject("employee", employee);
         model.addObject("positions", positionService.findAll());
         model.addObject("levels", levelService.findAll());
+        model.addObject("emails", employeeService.findAllEmails().stream()
+                .filter(e -> !e.equals(employee.getEmail()))
+                .collect(Collectors.toList()));
         return model;
     }
 

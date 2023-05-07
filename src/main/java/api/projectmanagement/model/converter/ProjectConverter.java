@@ -35,15 +35,7 @@ public class ProjectConverter {
         projectDto.setEmployeeIds(projectDao.getEmployees().stream()
                 .map(EmployeeDao::getId)
                 .collect(Collectors.toList()));
-        projectDto.setProjectsDetails(projectDao.getEmployees().stream()
-                .map(this::getEmployeeDetails)
-                .collect(Collectors.toList()));
         return projectDto;
     }
 
-    private String getEmployeeDetails(EmployeeDao employee){
-        return employee.getFirstName().charAt(0) + ". " + employee.getLastName() +
-                " - " + employee.getLevel().getName() + " " + employee.getPosition().getName() +
-                " email: " + employee.getEmail();
-    }
 }
