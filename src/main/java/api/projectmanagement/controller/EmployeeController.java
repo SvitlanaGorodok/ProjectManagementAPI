@@ -1,8 +1,6 @@
 package api.projectmanagement.controller;
 
-import api.projectmanagement.exception.EntityNotFoundException;
 import api.projectmanagement.model.dto.EmployeeDto;
-import api.projectmanagement.model.dto.PositionDto;
 import api.projectmanagement.service.EmployeeLevelService;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.PositionService;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -35,6 +34,7 @@ public class EmployeeController {
         ModelAndView model = new ModelAndView("employees/create");
         model.addObject("positions", positionService.findAll());
         model.addObject("levels", levelService.findAll());
+        model.addObject("emails", List.of("lukrainka@gmail.com", "test@gmail.com"));
         return model;
     }
 

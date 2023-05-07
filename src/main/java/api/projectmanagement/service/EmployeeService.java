@@ -9,17 +9,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService implements CRUDService<EmployeeDto>{
+public class EmployeeService implements CRUDService<EmployeeDto> {
     private final EmployeeConverter converter;
     private final EmployeeRepository repository;
+
     @Override
     public EmployeeDto save(EmployeeDto employeeDto) {
-        if(employeeDto.getId() == null){
+        if (employeeDto.getId() == null) {
             employeeDto.setId(UUID.randomUUID());
         }
         EmployeeDao saved = repository.save(converter.toDao(employeeDto));
@@ -43,5 +45,10 @@ public class EmployeeService implements CRUDService<EmployeeDto>{
     @Override
     public void deleteById(UUID id) {
         repository.deleteById(id);
+    }
+
+    public Optional<EmployeeDto> findByEmail(String email) {
+        return repository.findByEmail(email)
+                .map(converter::toDto);
     }
 }

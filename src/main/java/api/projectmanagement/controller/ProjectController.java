@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/projects")
@@ -58,5 +60,17 @@ public class ProjectController {
     public RedirectView update(@Validated @ModelAttribute("employeeDto") ProjectDto projectDto) {
         projectService.save(projectDto);
         return new RedirectView("/projects");
+    }
+
+    @GetMapping("/details/{id}")
+    public ModelAndView details(@PathVariable("id") UUID id) {
+        ModelAndView model = new ModelAndView("projects/details");
+        ProjectDto project = projectService.findById(id);
+        model.addObject("project", project);
+        List<EmployeeDto> employees = employeeService.findAll().stream()
+                .filter(e -> project.getEmployeeIds().contains(e.getId()))
+                .collect(Collectors.toList());
+        model.addObject("employees", employees);
+        return model;
     }
 }

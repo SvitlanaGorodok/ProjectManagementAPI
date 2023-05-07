@@ -2,54 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Update</title>
-  <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Update</title>
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
-<div>
-  <form method="POST" th:action="@{/employees/update}">
-    <input hidden="hidden"  th:value="${employee.id}" name = "id"/>
-    <div class="form-group">
-      <input type="text" th:value="${employee.firstName}" name="firstName" placeholder="First name">
-    </div>
-    <div class="form-group">
-      <input type="text" th:value="${employee.lastName}" name="lastName" placeholder="Last name">
-    </div>
-    <div class="form-group">
-      <input type="text" th:value="${employee.email}" name="email" placeholder="Email">
-    </div>
-    <h5> Position:
-      <select id="position" name="positionId">
-        <option th:each="position : ${positions}"
-                th:value="${position.id}"
-                th:text="${position.name}"
-                th:selected="${position.id} == ${employee.positionId}">
-        </option>
-      </select>
-    </h5>
-    <h5> Level:
-      <select id="level" name="levelId">
-        <option th:each="level : ${levels}"
-                th:value="${level.id}"
-                th:text="${level.name}"
-                th:selected="${level.id} == ${employee.levelId}">
-        </option>
-      </select>
-    </h5>
-    <p>
-      <button class="btn btn-primary" type="submit">Save</button>
-      <input class="btn btn-secondary" type="reset" value="Reset form">
-    </p>
-    <p>
-      <a class="btn btn-info" title="Back to list"
-         th:href="@{/employees}">Back to employee list </a>
-    </p>
-  </form>
-  <p th:text="${msg}"></p>
+<div style="margin: 10px">
+    <form method="POST" th:action="@{/projects/update}">
+        <input hidden="hidden" th:value="${project.id}" name="id"/>
+        <div class="form-group">
+            <input class="form-control" type="text" th:value="${project.name}" name="name" placeholder="First name"
+                   required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="date" th:value="${project.startDate}" name="startDate"
+                   placeholder="Start date" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="date" th:value="${project.endDate}" name="endDate" placeholder="End date"
+                   required>
+        </div>
+        <h5> Employees
+            <select class="form-control selectpicker" id="employee" name="employeeIds" multiple required>
+                <option th:each="employee : ${employees}"
+                        th:value="${employee.id}"
+                        th:text="${employee.positionDetails} + ' ' + ${employee.firstName} + ' '
+                            + ${employee.lastName} + ' ' + ' email: ' + ${employee.email}"
+                        th:selected="${#arrays.contains(project.employeeIds, employee.id)}">
+                </option>
+            </select>
+        </h5>
+        <p>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <input class="btn btn-secondary" type="reset" value="Reset form">
+        </p>
+        <p>
+            <a class="btn btn-info" title="Back to list"
+               th:href="@{/projects}">Back to projects list</a>
+        </p>
+    </form>
 </div>
 </body>
 </html>
