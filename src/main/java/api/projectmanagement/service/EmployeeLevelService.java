@@ -1,6 +1,6 @@
 package api.projectmanagement.service;
 
-import api.projectmanagement.exception.EntityNotFoundException;
+import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.converter.EmployeeLevelConverter;
 import api.projectmanagement.model.dao.EmployeeLevelDao;
 import api.projectmanagement.model.dto.EmployeeLevelDto;
@@ -36,7 +36,7 @@ public class EmployeeLevelService implements CRUDService<EmployeeLevelDto>{
     @Override
     public EmployeeLevelDto findById(UUID id) {
         EmployeeLevelDao levelDao = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Employee level with id " + id + " not found!"));
+                .orElseThrow(() -> new NoSuchEntityFoundException("Employee level with id " + id + " not found!"));
         return converter.toDto(levelDao);
     }
 

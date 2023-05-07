@@ -1,6 +1,6 @@
 package api.projectmanagement.service;
 
-import api.projectmanagement.exception.EntityNotFoundException;
+import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.converter.PositionConverter;
 import api.projectmanagement.model.dao.PositionDao;
 import api.projectmanagement.model.dto.PositionDto;
@@ -37,7 +37,7 @@ public class PositionService implements CRUDService<PositionDto> {
     @Override
     public PositionDto findById(UUID id) {
         PositionDao positionDao = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Position with id " + id + " not found!"));
+                .orElseThrow(() -> new NoSuchEntityFoundException("Position with id " + id + " not found!"));
         return converter.toDto(positionDao);
     }
 

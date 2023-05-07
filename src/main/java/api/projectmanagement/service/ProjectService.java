@@ -1,11 +1,12 @@
 package api.projectmanagement.service;
 
-import api.projectmanagement.exception.EntityNotFoundException;
+import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.converter.ProjectConverter;
 import api.projectmanagement.model.dao.ProjectDao;
 import api.projectmanagement.model.dto.ProjectDto;
 import api.projectmanagement.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +20,16 @@ public class ProjectService implements CRUDService<ProjectDto>{
     private final ProjectRepository repository;
     @Override
     public ProjectDto save(ProjectDto projectDto) {
+        ProjectDao projectDao;
         if(projectDto.getId() == null){
             projectDto.setId(UUID.randomUUID());
         }
-        ProjectDao saved = repository.save(converter.toDao(projectDto));
-        return converter.toDto(saved);
+        try {
+            projectDao = repository.save(converter.toDao(projectDto));
+        } catch (JpaObjectRetrievalFailureException e){
+            throw new NoSuchEntityFoundException("Couldn't create project! Employees not found!");
+        }
+        return converter.toDto(projectDao);
     }
 
     @Override
@@ -36,7 +42,7 @@ public class ProjectService implements CRUDService<ProjectDto>{
     @Override
     public ProjectDto findById(UUID id) {
         ProjectDao projectDao = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Project with id " + id + " not found!"));
+                .orElseThrow(() -> new NoSuchEntityFoundException("Project with id " + id + " not found!"));
         return converter.toDto(projectDao);
     }
 

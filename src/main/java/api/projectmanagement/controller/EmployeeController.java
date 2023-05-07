@@ -1,10 +1,12 @@
 package api.projectmanagement.controller;
 
+import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.dto.EmployeeDto;
 import api.projectmanagement.service.EmployeeLevelService;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.PositionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +69,14 @@ public class EmployeeController {
     public RedirectView update(@Validated @ModelAttribute("employeeDto") EmployeeDto employeeDto) {
         employeeService.save(employeeDto);
         return new RedirectView("/employees");
+    }
+
+    @ExceptionHandler(NoSuchEntityFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleNoSuchElementFoundException(NoSuchEntityFoundException exception) {
+        ModelAndView model = new ModelAndView("exception");
+        model.addObject("msg",exception.getMessage());
+        return model;
     }
 
 }

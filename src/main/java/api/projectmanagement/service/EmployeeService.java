@@ -1,6 +1,6 @@
 package api.projectmanagement.service;
 
-import api.projectmanagement.exception.EntityNotFoundException;
+import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.converter.EmployeeConverter;
 import api.projectmanagement.model.dao.EmployeeDao;
 import api.projectmanagement.model.dto.EmployeeDto;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ public class EmployeeService implements CRUDService<EmployeeDto> {
     @Override
     public EmployeeDto findById(UUID id) {
         EmployeeDao employeeDao = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Employee with id " + id + " not found!"));
+                .orElseThrow(() -> new NoSuchEntityFoundException("Employee with id " + id + " not found!"));
         return converter.toDto(employeeDao);
     }
 
