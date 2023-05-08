@@ -1,12 +1,10 @@
 package api.projectmanagement.controller;
 
-import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.dto.EmployeeDto;
 import api.projectmanagement.model.dto.ProjectDto;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.ProjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
