@@ -1,9 +1,7 @@
 package api.projectmanagement.model.dao;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -41,15 +39,4 @@ public class EmployeeDao {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "employees")
     List<ProjectDao> projects;
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", position=" + position.getName() +
-                ", level=" + level.getName() +
-                '}';
-    }
 }

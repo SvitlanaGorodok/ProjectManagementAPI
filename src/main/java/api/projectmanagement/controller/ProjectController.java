@@ -80,12 +80,4 @@ public class ProjectController {
         model.addObject("employees", employees);
         return model;
     }
-
-    @ExceptionHandler(NoSuchEntityFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handleNoSuchEntityFoundException(NoSuchEntityFoundException exception) {
-        ModelAndView model = new ModelAndView("exception");
-        model.addObject("msg",exception.getMessage());
-        return model;
-    }
 }

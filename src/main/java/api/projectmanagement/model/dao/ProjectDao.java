@@ -1,9 +1,7 @@
 package api.projectmanagement.model.dao;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -36,15 +34,4 @@ public class ProjectDao {
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<EmployeeDao> employees;
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", employeeDaos=" + employees +
-                '}';
-    }
 }
