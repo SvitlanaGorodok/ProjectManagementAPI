@@ -4,6 +4,7 @@ import api.projectmanagement.model.dto.EmployeeDto;
 import api.projectmanagement.model.dto.ProjectDto;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.ProjectService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,11 +37,17 @@ public class ProjectControllerTest {
     private ProjectController projectController;
 
     private MockMvc mockMvc;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(projectController).build();
+    }
+
+    @AfterEach
+    void closeService() throws Exception {
+        closeable.close();
     }
 
     @Test
