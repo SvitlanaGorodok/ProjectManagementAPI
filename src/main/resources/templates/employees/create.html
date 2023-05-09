@@ -23,7 +23,8 @@
                    title="Please provide correct email format: e.g., name@gmail.com" placeholder="Email" required>
         </div>
         <h5> Position
-            <select class="form-control" id="position" name="positionId">
+            <select class="form-control" id="position" name="positionId" required>
+                <option style="display:none">
                 <option th:each="position : ${positions}"
                         th:value="${position.id}"
                         th:text="${position.name}">
@@ -31,7 +32,8 @@
             </select>
         </h5>
         <h5> Level
-            <select class="form-control" id="level" name="levelId">
+            <select class="form-control" id="level" name="levelId" required>
+                <option style="display:none">
                 <option th:each="level : ${levels}"
                         th:value="${level.id}"
                         th:text="${level.name}">
@@ -60,8 +62,6 @@
             alert('An account with email address ' + email + ' already exists!');
         }
     }
-</script>
-
 </script>
 </body>
 </html>

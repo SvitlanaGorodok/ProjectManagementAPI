@@ -68,4 +68,15 @@ public class EmployeeController {
         employeeService.save(employeeDto);
         return new RedirectView("/employees");
     }
+
+    @GetMapping("/find")
+    public ModelAndView find(@Validated @ModelAttribute("employeeDto") EmployeeDto employeeDto) {
+        ModelAndView model = new ModelAndView("employees/find");
+        model.addObject("positions", positionService.findAll());
+        model.addObject("levels", levelService.findAll());
+        if(employeeDto != null){
+            model.addObject("employees", employeeService.findByParameters(employeeDto));
+        }
+        return model;
+    }
 }

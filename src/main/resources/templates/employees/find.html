@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find</title>
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="~{navbar :: navbar}"></div>
+<div style="margin: 10px">
+    <form th:method="GET" th:action="@{/employees/find}">
+        <div class="form-group">
+            <input class="form-control" type="text" name="firstName" placeholder="First name">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="lastName" placeholder="Last name">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="email" placeholder="Email">
+        </div>
+        <h5> Position
+            <select class="form-control" id="position" name="positionId">
+                <option style="display:none">
+                <option th:each="position : ${positions}"
+                        th:value="${position.id}"
+                        th:text="${position.name}">
+                </option>
+            </select>
+        </h5>
+        <h5> Level
+            <select class="form-control" id="level" name="levelId">
+                <option style="display:none">
+                <option th:each="level : ${levels}"
+                        th:value="${level.id}"
+                        th:text="${level.name}">
+                </option>
+            </select>
+        </h5>
+        <p>
+            <button class="btn btn-primary" type="submit">Find</button>
+            <input class="btn btn-secondary" type="reset" value="Reset form">
+        </p>
+        <p>
+            <a class="btn btn-info" title="Back to list"
+               th:href="@{/employees}">Back to employees list </a>
+        </p>
+    </form>
+    <div th:if="${not #lists.isEmpty(employees)}">
+        <table style="text-align: center" border="2" width="100%">
+            <tr>
+                <td>Id</td>
+                <td>First name</td>
+                <td>Last name</td>
+                <td>Email</td>
+                <td>Position</td>
+                <td>Employee managing</td>
+            </tr>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.firstName}"></td>
+                <td th:text="${employee.lastName}"></td>
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.positionDetails}"></td>
+                <td>
+                    <a class="btn btn-primary btn-sm" title="Edit"
+                       th:href="@{/employees/update/{id}(id=${employee.id})}">Edit
+                    </a>
+                    <a class="btn btn-danger btn-sm" title="Delete"
+                       th:href="@{/employees/delete/{id}(id=${employee.id})}">Delete
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div th:if="${#lists.isEmpty(employees)}">
+        <span>No results!</span>
+    </div>
+</div>
+</body>
+</html>

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,25 @@ public class EmployeeService implements CRUDService<EmployeeDto> {
 
     public List<String> findAllEmails(){
         return repository.findAllEmails();
+    }
+
+    public List<EmployeeDto> findByParameters(EmployeeDto employeeDto){
+        String firstName = sqlFormat(employeeDto.getFirstName());
+        String lastName = sqlFormat(employeeDto.getLastName());
+        String email = sqlFormat(employeeDto.getEmail());
+        List<EmployeeDao> employees = repository.findByParameters(
+                firstName, lastName, email,
+                employeeDto.getPositionId(), employeeDto.getLevelId());
+        return employees.stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private String sqlFormat(String text){
+        if(text == null || text.isEmpty()){
+            return "";
+        }
+        return "%" + text.toLowerCase() + "%";
     }
 
 }
