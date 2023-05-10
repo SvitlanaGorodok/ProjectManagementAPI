@@ -65,7 +65,7 @@ public class EmployeeService implements CRUDService<EmployeeDto> {
 
     private String sqlFormat(String text){
         if(text == null || text.isEmpty()){
-            return "";
+            return "%%";
         }
         return "%" + text.toLowerCase() + "%";
     }

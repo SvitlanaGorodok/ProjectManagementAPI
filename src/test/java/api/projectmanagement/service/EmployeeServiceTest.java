@@ -137,9 +137,48 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void testFindAllEmails(){
+    public void testFindAllEmails() {
         List<String> emails = List.of("email1", "email2");
         when(repository.findAllEmails()).thenReturn(emails);
         assertThat(emails).isSameAs(employeeService.findAllEmails());
+    }
+
+    @Test
+    public void testFindByParameters() {
+        UUID id = UUID.randomUUID();
+        UUID positionId = UUID.randomUUID();
+        UUID levelId = UUID.randomUUID();
+
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setId(id);
+        employeeDto.setFirstName("first name");
+        employeeDto.setLastName("last name");
+        employeeDto.setEmail("email");
+        employeeDto.setPositionId(positionId);
+        employeeDto.setLevelId(levelId);
+
+        EmployeeDao employeeDao = new EmployeeDao();
+        employeeDao.setId(id);
+        employeeDao.setFirstName("first name");
+        employeeDao.setLastName("last name");
+        employeeDao.setEmail("email");
+        PositionDao positionDao = new PositionDao();
+        positionDao.setId(positionId);
+        employeeDao.setPosition(positionDao);
+        EmployeeLevelDao level = new EmployeeLevelDao();
+        level.setId(levelId);
+        employeeDao.setLevel(level);
+
+        when(repository.findByParameters(anyString(), anyString(), anyString(),
+                any(UUID.class), any(UUID.class))).thenReturn(List.of(employeeDao));
+
+        EmployeeDto findEmployee = employeeService.findByParameters(employeeDto).get(0);
+
+        assertThat(employeeDto.getId()).isSameAs(findEmployee.getId());
+        assertThat(employeeDto.getFirstName()).isSameAs(findEmployee.getFirstName());
+        assertThat(employeeDto.getLastName()).isSameAs(findEmployee.getLastName());
+        assertThat(employeeDto.getEmail()).isSameAs(findEmployee.getEmail());
+        assertThat(employeeDto.getPositionId()).isSameAs(findEmployee.getPositionId());
+        assertThat(employeeDto.getLevelId()).isSameAs(findEmployee.getLevelId());
     }
 }

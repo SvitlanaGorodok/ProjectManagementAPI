@@ -15,8 +15,11 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDao, UUID> {
     List<String> findAllEmails();
 
     @Query(value = "SELECT e.* FROM employees e " +
-            "WHERE LOWER(e.first_name) LIKE :firstName OR LOWER(e.last_name) LIKE :lastName " +
-            "OR LOWER(e.email) LIKE :email OR e.position_id = :positionId OR e.level_id = :levelId",
+            "WHERE LOWER(e.first_name) LIKE :firstName " +
+            "AND LOWER(e.last_name) LIKE :lastName " +
+            "AND LOWER(e.email) LIKE :email " +
+            "AND e.position_id = COALESCE( :positionId , e.position_id) " +
+            "AND e.level_id = COALESCE( :levelId , e.level_id)",
             nativeQuery  = true)
     List<EmployeeDao> findByParameters(@Param("firstName") String firstName, @Param("lastName") String lastName,
                                        @Param("email") String email, @Param("positionId") UUID positionId,

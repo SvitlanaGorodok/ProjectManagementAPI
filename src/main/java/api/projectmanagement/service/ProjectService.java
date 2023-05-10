@@ -3,12 +3,15 @@ package api.projectmanagement.service;
 import api.projectmanagement.exception.NoSuchEntityFoundException;
 import api.projectmanagement.model.converter.ProjectConverter;
 import api.projectmanagement.model.dao.ProjectDao;
+import api.projectmanagement.model.dto.FindProjectParam;
 import api.projectmanagement.model.dto.ProjectDto;
 import api.projectmanagement.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,5 +56,33 @@ public class ProjectService implements CRUDService<ProjectDto>{
 
     public List<String> findAllNames(){
         return repository.findAllNames();
+    }
+
+    public List<ProjectDto> findByParameters(FindProjectParam projectParam){
+        String name = sqlTextFormat(projectParam.getName());
+        Date startDateFrom = sqlDateFormat(projectParam.getStartDateFrom());
+        Date startDateTo = sqlDateFormat(projectParam.getStartDateTo());
+        Date endDateFrom = sqlDateFormat(projectParam.getEndDateFrom());
+        Date endDateTo = sqlDateFormat(projectParam.getEndDateTo());
+        List<ProjectDao> employees = repository.findByParameters(
+                name, startDateFrom, startDateTo,
+                endDateFrom, endDateTo);
+        return employees.stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private String sqlTextFormat(String text){
+        if(text == null || text.isEmpty()){
+            return "%%";
+        }
+        return "%" + text.toLowerCase() + "%";
+    }
+
+    private Date sqlDateFormat(String text){
+        if(text == null || text.isEmpty()){
+            return null;
+        }
+        return Date.valueOf(text);
     }
 }

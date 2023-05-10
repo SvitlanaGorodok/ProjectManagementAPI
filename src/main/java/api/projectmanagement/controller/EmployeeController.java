@@ -5,12 +5,17 @@ import api.projectmanagement.service.EmployeeLevelService;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.PositionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -70,13 +75,20 @@ public class EmployeeController {
     }
 
     @GetMapping("/find")
-    public ModelAndView find(@Validated @ModelAttribute("employeeDto") EmployeeDto employeeDto) {
+    public ModelAndView findForm() {
         ModelAndView model = new ModelAndView("employees/find");
         model.addObject("positions", positionService.findAll());
         model.addObject("levels", levelService.findAll());
-        if(employeeDto != null){
-            model.addObject("employees", employeeService.findByParameters(employeeDto));
-        }
+        return model;
+    }
+
+    @PostMapping("/find")
+    public ModelAndView find(@Validated @ModelAttribute("employeeDto") EmployeeDto employeeDto) {
+        ModelAndView model = new ModelAndView("employees/find");
+        List<EmployeeDto> employees = employeeService.findByParameters(employeeDto);
+        model.addObject("employees", employees);
+        model.addObject("positions", positionService.findAll());
+        model.addObject("levels", levelService.findAll());
         return model;
     }
 }

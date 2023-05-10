@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{navbar :: navbar}"></div>
 <div style="margin: 10px">
-    <form th:method="GET" th:action="@{/employees/find}">
+    <form th:method="POST" th:action="@{/employees/find}">
         <div class="form-group">
             <input class="form-control" type="text" name="firstName" placeholder="First name">
         </div>

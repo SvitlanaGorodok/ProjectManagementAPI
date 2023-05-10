@@ -24,6 +24,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -159,5 +160,57 @@ public class EmployeeControllerTest {
                         .flashAttr("employeeDto", new EmployeeDto()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/employees"));
+    }
+
+    @Test
+    public void testFindForm() throws Exception {
+        List<PositionDto> positions = new ArrayList<>();
+        positions.add(new PositionDto());
+        positions.add(new PositionDto());
+
+        List<EmployeeLevelDto> levels = new ArrayList<>();
+        levels.add(new EmployeeLevelDto());
+        levels.add(new EmployeeLevelDto());
+
+        when(positionService.findAll()).thenReturn(positions);
+        when(levelService.findAll()).thenReturn(levels);
+
+        mockMvc.perform(get("/employees/find"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employees/find"))
+                .andExpect(model().attribute("positions", hasSize(2)))
+                .andExpect(model().attribute("levels", hasSize(2)));
+    }
+
+    @Test
+    public void testFind() throws Exception {
+        List<EmployeeDto> employees = new ArrayList<>();
+        employees.add(new EmployeeDto());
+        employees.add(new EmployeeDto());
+
+        List<PositionDto> positions = new ArrayList<>();
+        positions.add(new PositionDto());
+        positions.add(new PositionDto());
+
+        List<EmployeeLevelDto> levels = new ArrayList<>();
+        levels.add(new EmployeeLevelDto());
+        levels.add(new EmployeeLevelDto());
+
+        when(positionService.findAll()).thenReturn(positions);
+        when(levelService.findAll()).thenReturn(levels);
+        when(employeeService.findByParameters(any(EmployeeDto.class))).thenReturn(employees);
+
+        mockMvc.perform(post("/employees/find")
+                        .param("firstName", "firstName")
+                        .param("lastName", "lastName")
+                        .param("email", "email")
+                        .param("positionId", UUID.randomUUID().toString())
+                        .param("levelId", UUID.randomUUID().toString())
+                        .flashAttr("employeeDto", new EmployeeDto()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employees/find"))
+                .andExpect(model().attribute("positions", hasSize(2)))
+                .andExpect(model().attribute("levels", hasSize(2)))
+                .andExpect(model().attribute("employees", hasSize(2)));
     }
 }

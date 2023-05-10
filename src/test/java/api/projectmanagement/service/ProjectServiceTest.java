@@ -6,10 +6,8 @@ import api.projectmanagement.model.converter.EmployeeLevelConverter;
 import api.projectmanagement.model.converter.PositionConverter;
 import api.projectmanagement.model.converter.ProjectConverter;
 import api.projectmanagement.model.dao.EmployeeDao;
-import api.projectmanagement.model.dao.EmployeeLevelDao;
-import api.projectmanagement.model.dao.PositionDao;
 import api.projectmanagement.model.dao.ProjectDao;
-import api.projectmanagement.model.dto.EmployeeDto;
+import api.projectmanagement.model.dto.FindProjectParam;
 import api.projectmanagement.model.dto.ProjectDto;
 import api.projectmanagement.repository.ProjectRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -151,5 +149,40 @@ public class ProjectServiceTest {
         List<String> projectNames = List.of("name1", "name2");
         when(repository.findAllNames()).thenReturn(projectNames);
         assertThat(projectNames).isSameAs(projectService.findAllNames());
+    }
+
+    @Test
+    public void testFindByParameters() {
+        UUID id = UUID.randomUUID();
+        UUID employeeId = UUID.randomUUID();
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setId(id);
+        projectDto.setName("name");
+        projectDto.setStartDate(Date.valueOf("2022-01-01"));
+        projectDto.setEndDate(Date.valueOf("2022-02-01"));
+        projectDto.setEmployeeIds(List.of(employeeId));
+
+        ProjectDao projectDao = new ProjectDao();
+        projectDao.setId(id);
+        projectDao.setName("name");
+        projectDao.setStartDate(Date.valueOf("2022-01-01"));
+        projectDao.setEndDate(Date.valueOf("2022-02-01"));
+        EmployeeDao employeeDao = new EmployeeDao();
+        employeeDao.setId(employeeId);
+        projectDao.setEmployees(List.of(employeeDao));
+
+        FindProjectParam projectParam = new FindProjectParam();
+        projectParam.setName("name");
+        projectParam.setStartDateFrom("2022-01-01");
+
+        when(repository.findByParameters("%name%", Date.valueOf("2022-01-01"), null,
+                null, null)).thenReturn(List.of(projectDao));
+
+        ProjectDto findProject = projectService.findByParameters(projectParam).get(0);
+
+        assertThat(findProject.getId()).isSameAs(projectDto.getId());
+        assertThat(findProject.getName()).isSameAs(projectDto.getName());
+        assertEquals(findProject.getStartDate(), projectDto.getStartDate());
+        assertEquals(findProject.getEndDate(), projectDto.getEndDate());
     }
 }

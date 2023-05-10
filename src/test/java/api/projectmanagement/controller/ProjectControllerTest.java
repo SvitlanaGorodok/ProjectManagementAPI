@@ -1,7 +1,6 @@
 package api.projectmanagement.controller;
 
-import api.projectmanagement.model.dto.EmployeeDto;
-import api.projectmanagement.model.dto.ProjectDto;
+import api.projectmanagement.model.dto.*;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.ProjectService;
 import org.junit.jupiter.api.AfterEach;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -168,5 +168,33 @@ public class ProjectControllerTest {
                 .andExpect(view().name("projects/details"))
                 .andExpect(model().attribute("project", project))
                 .andExpect(model().attribute("employees", employees));
+    }
+
+    @Test
+    public void testFindForm() throws Exception {
+
+        mockMvc.perform(get("/projects/find"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("projects/find"));
+    }
+
+    @Test
+    public void testFind() throws Exception {
+        List<ProjectDto> projects = new ArrayList<>();
+        projects.add(new ProjectDto());
+        projects.add(new ProjectDto());
+
+        when(projectService.findByParameters(any(FindProjectParam.class))).thenReturn(projects);
+
+        mockMvc.perform(post("/projects/find")
+                        .param("name", "name")
+                        .param("startDateFrom", "2023-01-01")
+                        .param("startDateTo", "2023-01-01")
+                        .param("endDateFrom", "2023-01-01")
+                        .param("endDateTo", "2023-01-01")
+                        .flashAttr("projectDto", new ProjectDto()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("projects/find"))
+                .andExpect(model().attribute("projects", hasSize(2)));
     }
 }

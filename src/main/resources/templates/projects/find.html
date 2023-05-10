@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find</title>
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="~{navbar :: navbar}"></div>
+<div style="margin: 10px">
+    <form th:method="POST" th:action="@{/projects/find}">
+        <div class="form-group">
+            <input class="form-control" type="text" name="name" placeholder="Name">
+        </div>
+        <p>
+            Start date from
+            <input type="date" name="startDateFrom">
+            to
+            <input type="date" name="startDateTo">
+        </p>
+        <p>
+            End date from
+            <input type="date" name="endDateFrom">
+            to
+            <input type="date" name="endDateTo">
+        </p>
+        <p>
+            <button class="btn btn-primary" type="submit">Find</button>
+            <input class="btn btn-secondary" type="reset" value="Reset form">
+        </p>
+        <p>
+            <a class="btn btn-info" title="Back to list"
+               th:href="@{/projects}">Back to projects list </a>
+        </p>
+    </form>
+    <div th:if="${not #lists.isEmpty(projects)}">
+        <table style="text-align: center" border="2" width="100%">
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Start date</td>
+                <td>End date</td>
+                <td>Project managing</td>
+            </tr>
+            <tr th:each="project : ${projects}">
+                <td th:text="${project.id}"></td>
+                <td th:text="${project.name}"></td>
+                <td th:text="${project.startDate}"></td>
+                <td th:text="${project.endDate}"></td>
+                <td>
+                    <a class="btn btn-success btn-sm" title="Details"
+                       th:href="@{/projects/details/{id}(id=${project.id})}">Details
+                    </a>
+                    <a class="btn btn-primary btn-sm" title="Edit"
+                       th:href="@{/projects/update/{id}(id=${project.id})}">Edit
+                    </a>
+                    <a class="btn btn-danger btn-sm" title="Delete"
+                       th:href="@{/projects/delete/{id}(id=${project.id})}">Delete
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div th:if="${#lists.isEmpty(projects)}">
+        <span>No results!</span>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package api.projectmanagement.controller;
 
 import api.projectmanagement.model.dto.EmployeeDto;
+import api.projectmanagement.model.dto.FindProjectParam;
 import api.projectmanagement.model.dto.ProjectDto;
 import api.projectmanagement.service.EmployeeService;
 import api.projectmanagement.service.ProjectService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -76,6 +78,18 @@ public class ProjectController {
                 .filter(e -> project.getEmployeeIds().contains(e.getId()))
                 .collect(Collectors.toList());
         model.addObject("employees", employees);
+        return model;
+    }
+
+    @GetMapping("/find")
+    public ModelAndView findForm() {
+        return new ModelAndView("projects/find");
+    }
+
+    @PostMapping("/find")
+    public ModelAndView find(@Validated @ModelAttribute("findProjectParam") FindProjectParam findProjectParam) {
+        ModelAndView model = new ModelAndView("projects/find");
+        model.addObject("projects", projectService.findByParameters(findProjectParam));
         return model;
     }
 }
